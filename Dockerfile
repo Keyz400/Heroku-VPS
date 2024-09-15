@@ -41,9 +41,12 @@ RUN apt-get -qqy update \
         firefox htop terminator gnupg2 software-properties-common sudo xterm \
     && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     && apt install -qqy --no-install-recommends ./google-chrome-stable_current_amd64.deb \
+    # Add user and give sudo privileges
     && adduser --disabled-password --gecos "" account \
     && echo "account:12345678" | chpasswd \
     && usermod -aG sudo account \
+    # Ensure 'account' user can use sudo without a password
+    && echo "account ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
     && apt-add-repository ppa:remmina-ppa-team/remmina-next \
     && apt update \
     && apt install -qqy --no-install-recommends remmina remmina-plugin-rdp remmina-plugin-secret \
